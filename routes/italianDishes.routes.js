@@ -1,66 +1,27 @@
 const express = require("express");
-const italianDishes = require("../italianDishes");
-
-const uuid4 = require("uuid");
-const { getAllDishes } = require("../controllers/italianDishes.controllers");
 
 const router = express.Router();
 
-router.get("/", getAllDishes);
+const {
+  getAllItalianDishes,
+  getOneDish,
+  deleteDish,
+  updateDish,
+} = require("../controllers/italianDishes.controllers");
 
-router.get("/:id", (req, res) => {
-  try {
-    const { id } = req.params;
-    const foundDish = italianDishes.find((dish) => dish.id === Number(id));
-    res.status(200).json({ foundDish });
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
+// Define a route for all /dishes
+router.get("/", getAllItalianDishes);
 
-router.post("/", (req, res) => {
-  try {
-    const newDishData = { ...req.body, id: uuid4() };
+// Define a route for one /dishes
+router.get("/:id", getOneDish);
 
-    italianDishes.push(newDishData);
+// Create a middleware for creating a dish
+router.post("/");
 
-    res.status(201).json(newDish);
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
+// Create a middleware for deleting a dish
+router.delete("/:id", deleteDish);
 
-router.delete("/:id", (req, res) => {
-  try {
-    const dishId = req.params.id;
-    const dishIndex = italianDishes.findIndex((dish) => dish.id === +dishId);
-    if (dishIndex !== -1) {
-      italianDishes.splice(dishIndex, 1);
-
-      res.status(204).end();
-    } else {
-      res.status(404).json({ message: "Dish not found" });
-    }
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-router.put("/:id", (req, res) => {
-  try {
-    const dishId = req.params.id;
-    const updatedDishData = req.body;
-
-    const index = italianDishes.findIndex((dish) => dish.id === Number(dishId));
-    if (index !== -1) {
-      italianDishes[index] = { ...italianDishes[index], ...updatedDishData };
-      res.status(201).json({ italianDishes });
-    } else {
-      res.status(404).json({ message: "Dish not found" });
-    }
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
+// Create a middleware for updating a dish
+router.put("/:id", updateDish);
 
 module.exports = router;

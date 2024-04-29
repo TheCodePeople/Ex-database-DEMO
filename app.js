@@ -5,7 +5,7 @@ const connectDB = require("./database");
 
 const PORT = 8000;
 const app = express();
-// connectDB();
+connectDB();
 
 app.use(express.json());
 app.use("/dishes/italian", italianDishesRoutes);

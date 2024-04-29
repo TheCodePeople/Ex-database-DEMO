@@ -3,8 +3,9 @@ const express = require("express");
 const italianDishesRoutes = require("./routes/italianDishes.routes");
 const connectDB = require("./database");
 
-const PORT = 8000;
 const app = express();
+const PORT = 8000; // Choose a port of your choice
+
 connectDB();
 
 app.use(express.json());
